@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://68bkq4xn8qjq"]
+
+[ext_resource type="Script" path="res://entities/interactable/enemies/projectiles/projectile_base.gd" id="1_gfqfw"]
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_pi3pk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k031b"]
+
+[node name="projectile_base" type="AnimatableBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_gfqfw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_pi3pk")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_k031b")

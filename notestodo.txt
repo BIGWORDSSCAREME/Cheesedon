@@ -1,0 +1,20 @@
+Good point. They’re all derived from the basis vectors. Scale is derived from their magnitude, skew from the angle between them, and rotation without skew from rotating the basis vectors equally. The origin describes the translation relative to the parent. 
+
+https://www.reddit.com/r/godot/comments/11hyqeu/how_can_i_use_move_and_collide_instead_of_move/ 
+
+move_and_slide accepts movement per second, move_and_collide accepts instant movement. If you move inside _process or _physics_process, multiply the vector by delta.
+
+    I need to get the collision as return value
+
+You can do this with move_and_slide, Look at this
+
+First fight is vs a bear. You fight it with your fists. It has many stages. Maybe at one point it pulls a knife.
+Plaza- has rabbits that give you the option to step on them. Stepping on them kills them instantly and violently,
+giving the player nothing.
+
+Final boss is rats. The rat race.
+
+
+
+
+Bosses keep getting bigger until they take over the entire arena

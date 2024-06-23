@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwgx3teitddxn"]
+
+[ext_resource type="Script" path="res://entities/interactable/enemy_base.gd" id="1_dv2lj"]
+
+[node name="enemy_base" type="AnimatableBody2D"]
+script = ExtResource("1_dv2lj")

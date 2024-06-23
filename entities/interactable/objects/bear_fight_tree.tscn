@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dfjv8f4a5jybx"]
+
+[ext_resource type="Script" path="res://entities/interactable/objects/bear_fight_tree.gd" id="1_y03gw"]
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_kkqkg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwk77"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2bktr"]
+
+[node name="bear_fight_tree" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_y03gw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_kkqkg")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_dwk77")
+
+[node name="MovementHitbox" type="CollisionShape2D" parent="."]
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_2bktr")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bq2ivtrgoc4tx"]
+
+[ext_resource type="Script" path="res://BearBoss.gd" id="1_sugs1"]
+[ext_resource type="Texture2D" uid="uid://do4a0kpwbt70w" path="res://placeholder assets/other/Bear Trident.png" id="2_avksu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ir4x3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7rcx8"]
+
+[node name="BearBoss" type="AnimatableBody2D"]
+script = ExtResource("1_sugs1")
+
+[node name="AttackHitbox1" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox1"]
+shape = SubResource("RectangleShape2D_ir4x3")
+
+[node name="AttackHitbox2" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox2"]
+shape = SubResource("RectangleShape2D_ir4x3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7rcx8")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D"]
+position = Vector2(0, -3)
+scale = Vector2(0.668, 0.7)
+texture = ExtResource("2_avksu")

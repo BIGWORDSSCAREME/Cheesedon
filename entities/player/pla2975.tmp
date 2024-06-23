@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://lc2u4v7rnvnx"]
+
+[ext_resource type="Script" path="res://entities/player/player.gd" id="1_dem8f"]
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_hb0e3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1x86"]
+size = Vector2(117, 122)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tsfbg"]
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_dem8f")
+
+[node name="PlayerHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_u1x86")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_hb0e3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.25, 0.25)
+
+[node name="Attack_interact Hitbox" type="Area2D" parent="."]
+scale = Vector2(1, 0.5)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_interact Hitbox"]
+shape = SubResource("RectangleShape2D_tsfbg")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Attack_interact Hitbox"]
+texture = ExtResource("2_hb0e3")

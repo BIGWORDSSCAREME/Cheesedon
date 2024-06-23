@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://lc2u4v7rnvnx"]
+
+[ext_resource type="Script" path="res://entities/player/player.gd" id="1_dem8f"]
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_hb0e3"]
+[ext_resource type="Script" path="res://entities/player/player_cam.gd" id="3_cgws4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tsfbg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a3wvw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ydbq"]
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_dem8f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_hb0e3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.25, 0.25)
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("3_cgws4")
+
+[node name="Attack_interact Hitbox" type="Area2D" parent="."]
+scale = Vector2(1, 0.5)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack_interact Hitbox"]
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_tsfbg")
+
+[node name="Sprite2D" type="Sprite2D" parent="Attack_interact Hitbox"]
+texture = ExtResource("2_hb0e3")
+
+[node name="PlayerDamageHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDamageHitbox"]
+shape = SubResource("RectangleShape2D_a3wvw")
+
+[node name="MovementHitbox" type="CollisionShape2D" parent="."]
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_6ydbq")
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="area_entered" from="Attack_interact Hitbox" to="." method="_on_attack_interact_hitbox_area_entered"]
+[connection signal="area_exited" from="Attack_interact Hitbox" to="." method="_on_attack_interact_hitbox_area_exited"]
+[connection signal="area_entered" from="PlayerDamageHitbox" to="." method="_on_player_damage_hitbox_area_entered"]
