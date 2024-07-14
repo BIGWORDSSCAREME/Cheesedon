@@ -4,10 +4,13 @@ var player = null
 var velocity = Vector2.ZERO
 
 var damage = 0
-var maxhealth = 0
-var currenthealth = 0
+var contactdamage = 0
+var maxhp = 0
 var speed = 0
 var turnspeed : float = 0.0
+var currenthp = 0
+var aihbox = null
+var dmghbox = null
 
 
 # Called when the node enters the scene tree for the first time.
@@ -15,6 +18,9 @@ func _ready():
 	sync_to_physics = false
 	get_player()
 
+func _get_hitboxes():
+	aihbox = get_node_or_null("attack_interact_hitbox")
+	dmghbox = get_node_or_null("damage_hitbox")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -67,11 +73,11 @@ func to_target(target, pos, delta = 1):
 	return Vector2.ZERO if ( dif.x < 10 && dif.y < 10 )\
 	 else (target - pos).normalized() * speed * delta
 	
-func on_hit(caller, dmg):
-	if caller == player:
-		currenthealth -= dmg
-	if currenthealth == 0:
-		queue_free()
+#func on_hit(caller, dmg):
+	#if caller == player:
+		#currenthp -= dmg
+	#if currenthp == 0:
+		#queue_free()
 
 func death():
 	queue_free()
@@ -115,8 +121,6 @@ func pathfind(array, start: Vector2, end: Vector2) -> Array:
 	
 	var i = 0
 	while len(openl) != 0:
-		#i+=1
-		#print(i)
 		for acell in adjacentcells:
 			var searchingcell = opend[str(openl[0])]
 			
@@ -143,7 +147,6 @@ func pathfind(array, start: Vector2, end: Vector2) -> Array:
 		var lastsearched = openl.pop_front()
 		closed[str(lastsearched)] = opend[str(lastsearched)]
 		openl.sort_custom(search)
-	
 	#If this returns an empty array, something fucked up. Prolly just no viable route.
 	return []
 	

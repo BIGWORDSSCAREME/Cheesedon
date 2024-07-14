@@ -12,6 +12,11 @@ enum states {
 var state : states = states.CHASE
 var bulletcount = 0
 
+#attackvelocity is used once in the attack phase. it remains constant.
+var attackvelocity = Vector2.ZERO
+
+var timer = null
+
 var target = Vector2.ZERO:
 	set(value):
 		if state == states.CHASE:
@@ -37,23 +42,21 @@ var target = Vector2.ZERO:
 	get:
 		return target
 		
-#attackvelocity is used once in the attack phase. it remains constant.
-var attackvelocity = Vector2.ZERO
-
-var timer = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super._ready()
+	_get_hitboxes()
+	dmghbox.on_hit_s.connect(on_hit_f)
+	dmghbox.maxhp = 5
+	dmghbox.currenthp = 5
+	dmghbox.contactdamage = 2
 	timer = Timer.new()
 	timer.timeout.connect(_on_update_target_timer)
 	timer.set_one_shot(true)
 	timer.set_wait_time(2)
-	add_child(timer)
+	self.add_child(timer)
 	speed = 300
-	damage = 1
-	maxhealth = 5
-	currenthealth = 5
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -102,10 +105,10 @@ func _fire_projectile():
 	var b = bullet.instantiate()
 	b.velocity = to_target(player.position, position) / speed
 	b.position = self.position
+	b.scale = Vector2(3,3)
 	parent.add_child(b)
 	
-func on_hit(caller, dmg):
-	super.on_hit(caller, dmg)
-	print(currenthealth)
+func on_hit_f(caller, dmg):
+	print(currenthp)
 
  

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bw0lfakixyg88"]
+
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="1_c1frv"]
+[ext_resource type="Script" path="res://entities/attack_interact_hitbox.gd" id="1_ug30y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tsfbg"]
+
+[node name="Attack_interact Hitbox" type="Area2D"]
+scale = Vector2(1, 0.5)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_ug30y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_tsfbg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_c1frv")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

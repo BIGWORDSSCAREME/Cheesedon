@@ -260,4 +260,4 @@ layer_0/tile_data = PackedInt32Array(65531, 0, 0, 65532, 0, 0, 131068, 0, 0, 131
 [node name="bear_fight_tree_parent" parent="." instance=ExtResource("4_ku2hl")]
 
 [node name="bear_boss" parent="." instance=ExtResource("5_sdp5h")]
-position = Vector2(39, 822)
+position = Vector2(0, -2000)

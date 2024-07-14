@@ -126,13 +126,13 @@ func create_trees2(x, y, nooverlap = true):
 	obstacles = _make_array.call(x, y, obstacles)
 	return obstacles
 
-func _draw():
-	#Figure out boundaries of spawning stuff.
-	var r = arenadimensions.x / 2
-	var c = Vector2(0, arenadimensions.y / 2)
-	draw_circle(c, r, Color(255, 255, 255, 0.3))
-	draw_rect(Rect2(Vector2.ZERO - (Vector2(arenadimensions.x, arenadimensions.y) / 2),
-		Vector2(arenadimensions.x, arenadimensions.y)),  Color(0, 0, 255, 0.3), true)
+#func _draw():
+	##Figure out boundaries of spawning stuff.
+	#var r = arenadimensions.x / 2
+	#var c = Vector2(0, arenadimensions.y / 2)
+	#draw_circle(c, r, Color(255, 255, 255, 0.3))
+	#draw_rect(Rect2(Vector2.ZERO - (Vector2(arenadimensions.x, arenadimensions.y) / 2),
+		#Vector2(arenadimensions.x, arenadimensions.y)),  Color(0, 0, 255, 0.3), true)
 
 func on_tree_death():
 	killedtrees += 1
