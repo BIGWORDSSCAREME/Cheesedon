@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://c7kbh4pf0f664"]
 
 [ext_resource type="Script" path="res://entities/interactable/enemies/bee_parent.gd" id="1_r67if"]
-[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_2vbix"]
 [ext_resource type="Script" path="res://entities/interactable/enemies/bee_single.gd" id="2_su227"]
+[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="3_wm0kb"]
 [ext_resource type="PackedScene" uid="uid://dg6wrji1joiq7" path="res://entities/damage_hitbox.tscn" id="4_fxnpv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tly5"]
@@ -20,7 +20,7 @@ script = ExtResource("2_su227")
 shape = SubResource("RectangleShape2D_6tly5")
 
 [node name="Sprite2D" type="Sprite2D" parent="bee1/CollisionShape2D"]
-texture = ExtResource("2_2vbix")
+texture = ExtResource("3_wm0kb")
 
 [node name="damage_hitbox" parent="bee1" instance=ExtResource("4_fxnpv")]
 
@@ -34,7 +34,7 @@ script = ExtResource("2_su227")
 shape = SubResource("RectangleShape2D_6tly5")
 
 [node name="Sprite2D" type="Sprite2D" parent="bee2/CollisionShape2D"]
-texture = ExtResource("2_2vbix")
+texture = ExtResource("3_wm0kb")
 
 [node name="damage_hitbox" parent="bee2" instance=ExtResource("4_fxnpv")]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dfjv8f4a5jybx"]
 
 [ext_resource type="Script" path="res://entities/interactable/objects/bear_fight_tree.gd" id="1_y03gw"]
-[ext_resource type="Texture2D" uid="uid://dfdi7tr841853" path="res://icon.svg" id="2_kkqkg"]
+[ext_resource type="Texture2D" uid="uid://civdsa3577okc" path="res://art/trees/placeholder.png" id="2_f66ig"]
 [ext_resource type="PackedScene" uid="uid://dg6wrji1joiq7" path="res://entities/damage_hitbox.tscn" id="3_m1wle"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2bktr"]
@@ -11,7 +11,7 @@ collision_mask = 0
 script = ExtResource("1_y03gw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_kkqkg")
+texture = ExtResource("2_f66ig")
 
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
 scale = Vector2(6, 6)

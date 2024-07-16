@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bbmi7clx31ilt"]
+[gd_scene load_steps=7 format=3 uid="uid://bbmi7clx31ilt"]
 
 [ext_resource type="Texture2D" uid="uid://bmwdbwuilvwrn" path="res://maps/tiny dungeon kenney/Tilemap/tilemap_packed.png" id="1_2g37g"]
 [ext_resource type="PackedScene" uid="uid://lc2u4v7rnvnx" path="res://entities/player/player.tscn" id="1_iqtuo"]
+[ext_resource type="Texture2D" uid="uid://civdsa3577okc" path="res://art/tree/placeholder.png" id="4_025gu"]
 [ext_resource type="PackedScene" uid="uid://mf1rdudod1jg" path="res://entities/interactable/objects/bear_fight_tree_parent.tscn" id="4_ycv0x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lru68"]
@@ -152,3 +153,6 @@ layer_0/tile_data = PackedInt32Array(65531, 0, 0, 65532, 0, 0, 131068, 0, 0, 131
 [node name="Player" parent="." instance=ExtResource("1_iqtuo")]
 
 [node name="bear_fight_tree_parent" parent="." instance=ExtResource("4_ycv0x")]
+
+[node name="Sprite2D" type="Sprite2D" parent="bear_fight_tree_parent"]
+texture = ExtResource("4_025gu")
