@@ -7,12 +7,21 @@ var attacktimer = null
 #Cooldown timer called after an attack, and its timeout
 #allows another attack to be made.
 var cooldowntimer = null
+var attackcooldowndone = true
+#Set to false before attacking, set to true by attacktimer's timeout.
+var attackdone = false
+var ahbox1 = null
+var ahbox2 = null
+
+var attacks = [_bite_attack, _claw_attack]
+
 #Dash timer is only used in the dash attack. Calls it and changes the phase
 #of the dash attack.
 var dashtimer = null
 var dashstate = -1
-#Probably change "attacking" to "attack_unavailable" or something
-var attacking = false
+
+
+
 var currentAttack = null
 var attackphase = 0
 var phase = 0
@@ -24,26 +33,23 @@ var arenadimensions = null
 var cellsize = null
 
 const BASESPEED = 500
-const MAXHP = 100
 
 var overlapping = []
 
 enum states {
 	PASSIVE,
-	ATTACKING,
-	EATING,
-	FOLLOWING
+	ACTIVE,
+	EATING
 }
 func change_state(nstate):
 	match nstate:
 		"PASSIVE":
 			state = states.PASSIVE
-		"ATTACKING":
-			state = states.ATTACKING
+		"ACTIVE":
+			state = states.ACTIVE
 		"EATING":
 			state = states.EATING
-		"FOLLOWING":
-			state = states.FOLLOWING
+
 
 var state = states.PASSIVE
 
@@ -51,9 +57,12 @@ var state = states.PASSIVE
 func _ready():
 	super._ready()
 	_get_hitboxes()
+	ahbox1 = $Sprite2D/AttackHitbox1
+	ahbox2 = $Sprite2D/AttackHitbox2
 	dmghbox.on_hit_s.connect(on_hit_f)
 	dmghbox.on_death_s.connect(on_death_f)
-	currenthp = MAXHP
+	dmghbox.maxhp = 100
+	dmghbox.currenthp = dmghbox.maxhp
 	contactdamage = 3
 	attacktimer = Timer.new()
 	attacktimer.set_one_shot(true)
@@ -70,82 +79,31 @@ func _ready():
 	turnspeed = 0.01
 	speed = BASESPEED
 	currentAttack = _bite_attack
-	attacking = true
-	
-
-
-#Refactor some of this. Maybe have something like:
-#if currentattack:
-	#currentattack.call()
-#Execute for every physics_process. Make sure waking up the bear enables 
-#_physics_process().
-#Make every attack fit into that call. May need some other variables to
-#help out. Put all those declerations in one place with a comment
-#explaining them.
-#Have some helper functions called by the attack functions too.
+	attackdone = true
+	set_physics_process(false)
 
 func _physics_process(delta):
-	#Before it takes damage frsom the player, it stays stationary, ignoring the player
-	if currentAttack != null:
-		currentAttack = currentAttack.call()
 	velocity = Vector2.ZERO
-	if state == states.PASSIVE:
-		pass
-	elif state == states.FOLLOWING:
-		#Bear has 2 modes of following. A faster dash that doesn't change
-		#target for the duration, and a slower follow mode. In the slower
-		#mode, knocking down trees slows the bear down.
-		if dashstate == -1 && !randi_range(0, 150):
-			#Use get player angle to in direction of player. Set timer when dash starts
-			#that will allow bear to get to player plus some. When timer goes off,
-			#dash ends, stun begins, then back to normal.
-			
-			#Dash works with timer connecting different function after each goes off.
-			#MUCH OF THE LOGIC+STUFF CONTAINED IN THE _dash<x> functions.
-			dashstate = 0
-			_dash_attack()
-			print("dashing")
-		elif dashstate != 1 && dashstate != 2:
-			target = player.position
-			speed = BASESPEED
-
-
-		if dashstate == 1 && (position.x > arenadimensions.x / 2 || position.x < -arenadimensions.x / 2 || \
-		position.y > arenadimensions.y / 2 || position.y < - arenadimensions.y / 2):
-		#If the bear hits a wall early, then stop the timer and call the next function.
-			print("Dashed out of bounds!")
-			dashtimer.stop()			
-			dashstate = 1
-			_dash_attack()
-			
-			
+	if currentAttack != null:
+		attackdone = false
+		attackcooldowndone = false
+		currentAttack = currentAttack.call()
+	elif state == states.ACTIVE:
+		target = player.position
 		velocity = to_target(target, position, delta)
-
-
-	if currentAttack:
-		pass
-		#currentAttack.call()
-	elif state == states.ATTACKING && !attacking:
-		#Have some checks here to see if player is in a good position
-		#for a specific attack
-		pass
-
+		if attackcooldowndone && !randi_range(0, 150):
+			#Have some checks here to see if player is in a good position
+			#for a specific attack. (bite, claw, dash, etc), or pick randomly.
+			#Bite attack if player is near the front of the bear, claw if its
+			#near the bear but not in front.
+			#Calculate euclidian distance, then direction of player.
+			print("attack")
+			currentAttack = attacks[randi_range(0, len(attacks) - 1)]
+			
 	move_and_collide(velocity)
 	position.x = clamp(position.x, -arenadimensions.x / 2, arenadimensions.x / 2)
 	position.y = clamp(position.y, -arenadimensions.y / 2, arenadimensions.y / 2)
 		
-		
-	#elif state == states.ATTACKING:
-		#rotation = turn_towards()
-		#
-		##How does the boss decide to act?
-		#if !currentAttack:
-			#if attackFrame > 0:
-				#attackFrame = 0
-		#else:
-			##Keep doing the attack. If currentAttack returns null, the next time it will not go.
-			#currentAttack = currentAttack.call(delta, attackFrame)
-			#attackFrame += 1
 	
 
 func _claw_attack():
@@ -153,12 +111,12 @@ func _claw_attack():
 		attacktimer.set_wait_time(2)
 	if attacktimer.is_stopped():
 		#Change this to the starting position of the hands
-		$Sprite2D/AttackHitbox1.position = Vector2.ZERO
-		$Sprite2D/AttackHitbox2.position = Vector2.ZERO
+		_reset_hitboxes()
 		#Make sure to set attacking to true before calling these functions.
-		if !attacking: return null
+		#Reminder: when attacktimer expires it calls _attack_done which
+		#changes attacking to false.
+		if attackdone: return null; cooldowntimer.start()
 		attacktimer.start()
-		attacking = true
 		
 	const ATKSPEED = 0.025
 	
@@ -173,8 +131,8 @@ func _claw_attack():
 	
 
 	#Double check that delta is unneeded. I believe timers account for delta.
-	$Sprite2D/AttackHitbox1.position = Vector2(-aframe*5 - 10, -tlate* 10 + 20)
-	$Sprite2D/AttackHitbox2.position = Vector2(aframe*5 + 10, -tlate* 10 + 20)
+	ahbox1.position = Vector2(-aframe*5 - 10, -tlate* 10 + 20)
+	ahbox2.position = Vector2(aframe*5 + 10, -tlate* 10 + 20)
 	return _claw_attack
 	
 func _bite_attack():
@@ -187,11 +145,10 @@ func _bite_attack():
 		attacktimer.set_wait_time(2)
 	if attacktimer.is_stopped():
 		#Change this to the starting position of the hitbox
-		$Sprite2D/AttackHitbox1.transform = Transform2D.IDENTITY
+		_reset_hitboxes
 		#Make sure to set attacking to true before calling these functions.
-		if !attacking: return null; attackphase = 0
+		if attackdone: return null; attackphase = 0; cooldowntimer.start()
 		attacktimer.start()
-		attacking = true
 	var aframe = _timeleft_to_percent(attacktimer.time_left, attacktimer.wait_time)
 	if aframe < 25:
 		#Giving player some time to prepare. Doing the "tell". Queue animation.
@@ -208,12 +165,18 @@ func _bite_attack():
 		attackphase = 1
 	return _bite_attack
 
+func _reset_hitboxes():
+	ahbox1.transform = Transform2D.IDENTITY
+	ahbox2.transform = Transform2D.IDENTITY
+		
+
 func on_hit_f(caller, dmg):
 	if state == states.PASSIVE:
-		state = states.FOLLOWING
+		state = states.ACTIVE
 		currentAttack = _bite_attack
+		set_physics_process(true)
 		
-func on_death_f():
+func on_death_f(caller, dmg):
 	queue_free()
 	
 func _pos_to_grid(pos: Vector2):
@@ -232,7 +195,6 @@ func _dash_attack():
 	if dashstate == 0:
 		#Starting a dash towards the player position. Will continue
 		#towards the same (unmoving) position until timer goes off (dashstate is now 1).
-		attacking = true
 		dashstate = 1
 		speed = BASESPEED * 3
 		var distance = position.distance_to(player.position)
@@ -260,10 +222,14 @@ func _dash_attack():
 		dashstate = -1
 		
 func _cooldown_done():
-	attacking = false
+	attackcooldowndone = true
 	
 func _attack_done():
-	attacking = false
+	attackdone = false
+	currentAttack = null
+	attackphase = 0
+	_reset_hitboxes()
+	cooldowntimer.start()
 
 func _timeleft_to_percent(timeleft, waittime):
 	return (1 - (timeleft / waittime)) * 100

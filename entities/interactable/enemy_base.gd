@@ -96,8 +96,6 @@ func pathfind(array, start: Vector2, end: Vector2) -> Array:
 	var xlen = len(array)
 	var ylen = len(array[0])
 	
-	var mhd = func _manhatten_distance(p1, p2):
-		return abs(p1.x - p2.x) + abs(p1.y - p2.y)
 		
 	var search = func _least_distance(a, b):
 		#G score - distance away from start
@@ -126,7 +124,7 @@ func pathfind(array, start: Vector2, end: Vector2) -> Array:
 			
 			var pos = searchingcell['pos'] + acell
 			var g = 1 + opend[str(openl[0])]['G']
-			var h = mhd.call(pos, end)
+			var h =  _manhatten_distance(pos, end)
 			var previous = searchingcell['pos']
 			
 			if pos == end:
@@ -150,4 +148,8 @@ func pathfind(array, start: Vector2, end: Vector2) -> Array:
 	#If this returns an empty array, something fucked up. Prolly just no viable route.
 	return []
 	
-	
+func _manhatten_distance(p1, p2):
+		return abs(p1.x - p2.x) + abs(p1.y - p2.y)
+
+func _euc_distance(p1, p2):
+	return (p1 - p2).length()
